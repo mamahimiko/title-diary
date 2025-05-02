@@ -9,9 +9,10 @@ export async function getResponseForGivenPrompt(prompt) {
     const genAI = new GoogleGenerativeAI(API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+    const profile = JSON.parse(localStorage.getItem("profileInfo") || {});
     const result = await model.generateContent(
       `Please write the beginning of the story that you would expect based on this title in about 50 words.
-      Main character: Maho
+      Main character: ${profile.name}, who is ${profile.age} years old character is like ${profile.character} (Please do not directly mention age and personality in your writing. However, please write a writing that takes them into consideration.). 
       Title: ${prompt.title} 
       Subtitle : ${prompt.subtitle} 
       SubChracters: ${prompt.name1} , ${prompt.name2}, ${prompt.name3}

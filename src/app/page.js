@@ -9,6 +9,7 @@ import { PiNotePencilBold } from "react-icons/pi";
 import DiaryModal from "./DiaryModal";
 import dayjs from "dayjs";
 import { Poppins } from "next/font/google";
+import Mypage from "./Mypage";
 
 const now = dayjs();
 const today = now.format("YYYY-MM-DD");
@@ -33,6 +34,7 @@ const poppins = Poppins({
 
 function Header() {
   const [isScrolled, setScrolled] = useState(false);
+  const [activeModal, setActiveModal] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,13 +57,28 @@ function Header() {
         isScrolled ? "bg-black bg-opacity-90 shadow-lg" : "bg-transparent"
       }`}
     >
-      <div className="text-red-500 text-3xl py-5">LIFE like A DRAMA!</div>
+      <div className="text-red-500 text-3xl py-5 font-poppins font-bold">
+        TITLE DIARY
+      </div>
       <div
         className={`flex items-center space-x-6 text-white ml-auto ${
           isScrolled ? "text-white" : "text-black"
         }`}
       >
-        <div>My Page</div>
+        <Modal
+          isOpen={activeModal === "mypage"}
+          handleCloseModal={() => setActiveModal(null)}
+        >
+          <Mypage />
+        </Modal>
+        <button
+          onClick={() => {
+            setActiveModal("mypage");
+          }}
+          className=" hover:bg-gray-600 text-white font-semibold p-4 rounded shadow text-xl"
+        >
+          Mypage
+        </button>
       </div>
     </header>
   );
@@ -85,7 +102,6 @@ function Carousel({ year }) {
       <Modal
         isOpen={activeModal === "calendar"}
         handleCloseModal={() => setActiveModal(null)}
-        title="Calendar"
       >
         <Calendar selectedMonth={selectedMonth} />
       </Modal>
@@ -97,7 +113,7 @@ function Carousel({ year }) {
                 setSelectedMonth(month);
                 setActiveModal("calendar");
               }}
-              className="w-full h-full object-cover rounded-lg"
+              className="w-full h-full object-cover rounded-lg cursor-pointer  transition duration-300 hover:opacity-70"
               src={`/${month.imageId}`}
               alt={month.name}
               width={300}
@@ -131,7 +147,6 @@ export default function Home({ year }) {
   const todaysMonth = monthList.find(
     (month) => month.year === thisYear && month.name === titleMonth
   );
-  console.log("todaysMonth: ", todaysMonth);
 
   const handleCloseModal = () => {
     setActiveModal(false);
@@ -155,7 +170,6 @@ export default function Home({ year }) {
             <Modal
               isOpen={activeModal === "calendar"}
               handleCloseModal={() => setActiveModal(null)}
-              title="Calendar"
             >
               <Calendar selectedTodaysMonth={selectedTodaysMonth} />
             </Modal>

@@ -15,13 +15,18 @@ export default function DiaryModal() {
     name3: "",
     category: "",
     story: "",
+    image: "",
   });
   const [story, setStory] = useState("");
-  console.log(inputValue);
 
   const { title, subtitle, date, name1, name2, name3, category } = inputValue;
 
   const saveDiary = () => {
+    if (!inputValue.story) {
+      alert("Story saved! 📖✨");
+      return;
+    }
+
     const savedDiaries = JSON.parse(localStorage.getItem("diaries")) || [];
     const newDiary = { ...inputValue, id: nanoid() };
     const updatedDiaries = [...savedDiaries, newDiary];
@@ -36,11 +41,30 @@ export default function DiaryModal() {
     setInputValue({ ...inputValue, [name]: value });
   };
 
-  const callGemini = async () => {
-    console.log("Date value:", inputValue.date);
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
+    if (!file.type.starstWith("image/")) {
+      alert("Select image file.");
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      alert("Image size must be less than 2MB");
+    }
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setInputValue((prev) => ({ ...prev, image: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const callGemini = async () => {
     if (!inputValue.title.trim()) {
-      alert("Give me your a title!");
+      alert("Give your story a title!");
       return;
     }
     if (
@@ -48,7 +72,7 @@ export default function DiaryModal() {
       typeof inputValue.date !== "string" ||
       !inputValue.date.trim()
     ) {
-      alert("Put in the Date!");
+      alert("Don’t forget to add the date!");
       return;
     }
     const res = await getResponseForGivenPrompt(inputValue);
@@ -58,9 +82,7 @@ export default function DiaryModal() {
   return (
     <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
       <div className="bg-gray-800 p-10 rounded-lg shadow-lg w-2/3 max-w-lg">
-        <h1 className="text-center text-2xl font-bold mb-4">
-          Give Today a Title!
-        </h1>
+        <h1 className="text-center text-2xl font-bold mb-4">Title your day!</h1>
         <div className="mb-4">
           <input
             type="text"
@@ -68,7 +90,7 @@ export default function DiaryModal() {
             name="title"
             value={title || ""}
             onChange={handleInputChange}
-            placeholder="Additional title"
+            placeholder="Main title"
             className="w-full p-2 border border-gray-600 rounded bg-gray-700 text-white"
           />
         </div>
@@ -87,13 +109,10 @@ export default function DiaryModal() {
         <Datepicker
           onDateChange={(date) => {
             const formattedDate = date ? date.toISOString().split("T")[0] : "";
-            console.log("Formatted Date:", formattedDate); // 🔍 デバッグ用
             setInputValue((prev) => ({ ...prev, date: formattedDate }));
           }}
         />
-        <h2 className="text-lg mb-2">
-          Are there any characters in your story?
-        </h2>
+        <h2 className="text-lg mb-2">Any characters in your story?</h2>
         <div className="flex space-x-2 mb-4">
           <input
             type="text"
@@ -101,7 +120,7 @@ export default function DiaryModal() {
             name="name1"
             value={name1 || ""}
             onChange={handleInputChange}
-            placeholder="Name..."
+            placeholder="Enter a name"
             className="w-1/3 p-2 border-gray-600 rounded bg-gray-700 text-white"
           />
           <input
@@ -110,7 +129,7 @@ export default function DiaryModal() {
             name="name2"
             value={name2 || ""}
             onChange={handleInputChange}
-            placeholder="Name..."
+            placeholder="Enter a name"
             className="w-1/3 p-2 border-gray-600 rounded bg-gray-700 text-white"
           />
           <input
@@ -119,7 +138,7 @@ export default function DiaryModal() {
             name="name3"
             value={name3 || ""}
             onChange={handleInputChange}
-            placeholder="Name..."
+            placeholder="Enter a name"
             className="w-1/3 p-2 border-gray-600 rounded bg-gray-700 text-white"
           />
         </div>
@@ -141,19 +160,40 @@ export default function DiaryModal() {
             <option value="SF">SF</option>
           </select>
         </div>
+
         <div className="flex justify-around">
-          <div>
-            <RiImageAddFill className=" text-3xl mx-auto  text-gray-400 hover:text-white cursor-pointer" />
-          </div>
-          <div>
-            <button
-              onClick={callGemini}
-              className="text-center  bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-            >
-              Create your story!
-            </button>
-          </div>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            id="imageUpload"
+            hidden
+          />
+
+          <label htmlFor="imageUpload">
+            <RiImageAddFill className="text-3xl mx-auto  text-gray-400 hover:text-white cursor-pointer" />
+          </label>
         </div>
+
+        {inputValue.image && (
+          <div className="flex justify-center">
+            <img
+              src={inputValue.image}
+              alt="Uploaded"
+              className="w-40 h-40 object-cover rounded"
+            />
+          </div>
+        )}
+
+        <div>
+          <button
+            onClick={callGemini}
+            className="text-center  bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          >
+            Create your story!
+          </button>
+        </div>
+
         <div className="py-9">
           <div
             className="border
@@ -169,7 +209,7 @@ export default function DiaryModal() {
               onClick={saveDiary}
               className="text-center  bg-orange-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
             >
-              Save it
+              Save your diary
             </button>
           </div>
         </div>

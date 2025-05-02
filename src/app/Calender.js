@@ -13,7 +13,6 @@ const poppins = Poppins({
 
 export default function Calendar({ selectedMonth, selectedTodaysMonth }) {
   const season = selectedMonth || {};
-  console.log("selectedTodaysMonth:", selectedTodaysMonth);
 
   return (
     <div className="text-white relative w-full h-screen flex flex-col">

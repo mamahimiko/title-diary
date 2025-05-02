@@ -8,8 +8,6 @@ import { monthList } from "./monthData";
 export default function Diary({ selectedMonth, selectedTodaysMonth }) {
   const [diaries, setDiaries] = useState([]);
 
-  console.log("selectedTodaysMonth", selectedTodaysMonth);
-
   useEffect(() => {
     const savedDiaries = JSON.parse(localStorage.getItem("diaries")) || [];
     setDiaries(savedDiaries);
@@ -24,8 +22,6 @@ export default function Diary({ selectedMonth, selectedTodaysMonth }) {
   const displayDate = (diary) => {
     if (!diary || !diary.date) return "";
     const onlyDate = diary.date ? diary.date.slice(8, 10) : "";
-
-    console.log("diary:", diary);
 
     const dayNum = parseInt(onlyDate, 10);
     if (dayNum === 1 || dayNum === 21 || dayNum === 31) return dayNum + "st";
@@ -68,26 +64,36 @@ export default function Diary({ selectedMonth, selectedTodaysMonth }) {
               <p className="font-bold">{displayDate(diary)}</p>
             </div>
             <div className="px-5">
-              <Image
-                src={`/${
-                  selectedMonth?.imageId ||
-                  selectedTodaysMonth?.imageId ||
-                  "default.jpg"
-                }`}
-                alt={
-                  selectedMonth?.name || selectedTodaysMonth?.name || "Default"
-                }
-                width={180}
-                height={200}
-                className="w-120 h-auto"
-              />
+              {diary.image ? (
+                <img
+                  src={diary.image}
+                  alt="Diary"
+                  width={180}
+                  height={200}
+                  className="w-120 h-auto"
+                />
+              ) : (
+                <Image
+                  src={`/${
+                    selectedMonth?.imageId ||
+                    selectedTodaysMonth?.imageId ||
+                    "default.jpg"
+                  }`}
+                  alt={
+                    selectedMonth?.name ||
+                    selectedTodaysMonth?.name ||
+                    "Default"
+                  }
+                  width={180}
+                  height={200}
+                  className="w-120 h-auto"
+                />
+              )}
             </div>
 
             <div className="flex flex-row flex-wrap w-2/3">
               <h2 className="text-lg font-bold">{diary.title}</h2>
-              <div className="pl-3">
-                <PiNotePencilBold />
-              </div>
+
               <p className="py-2 w-full">{diary.story}</p>
             </div>
             <div className="flex">
