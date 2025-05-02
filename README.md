@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Title diary
+This is a unique diary app built with Next.js and Tailwind CSS. Users input the title and subtitle of the day, characters, photos, and select their mood. Then, Gemini AI generates an original, cinema-like diary entry.
+Entries are saved to monthly pages, and users can enjoy browsing them like searching for interesting drama episodes on Netflix.
+ 
+## Description
 
-## Getting Started
+This website created by :
+- Next.js
+- React
+- Tailwind CSS
 
-First, run the development server:
+and using packages like:
+- Generative AI/ Google
+- Next auth
+- Nanoid
+- dayjs
+- React data picker
+- Embla caroucel react
+- React icon
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- A unique concept app that uses AI to generate diary entries based on the title.
+- The diary pages are organized by month.
+- Smooth caroucel selections using Embla caroucel react.
+- A top page that changes daily using Day.js for date management.
+- Secure login functionality using NextAuth.
+- The project was developed in a team using a monorepo structure, with guidance received for each branch throughout the development process.
